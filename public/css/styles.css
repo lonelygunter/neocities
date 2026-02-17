@@ -1,24 +1,38 @@
+/* 1. DESIGN TOKENS (CSS Variables) */
 :root {
+  /* Sky / Water palette */
   --sky1: #a8d8f0;
   --sky2: #d4eef8;
   --sky3: #7ec8e3;
+
+  /* Nature greens */
+  --green1: #a8e6a3;
+  --green2: #6dd96d;
+
+  /* Accent (declared twice in original — keeping last value) */
+  --accent: #3ab5e6;
+
+  /* Glassmorphism */
   --glass-bg: rgba(255,255,255,0.35);
   --glass-border: rgba(255,255,255,0.7);
   --glass-shadow: rgba(100,180,240,0.25);
-  --green1: #a8e6a3;
-  --green2: #6dd96d;
-  --accent: #3ab5e6;
+
+  /* Text */
   --text-dark: #1a3a4a;
   --text-mid: #2c6080;
 }
 
 
+/* 2. RESET & BASE */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 
 body {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
   background:
     radial-gradient(ellipse at 20% 80%, #b8f0c8 0%, transparent 50%),
     radial-gradient(ellipse at 80% 10%, #c8e8ff 0%, transparent 55%),
@@ -27,10 +41,10 @@ body {
   background-attachment: fixed;
   color: var(--text-dark);
   padding: 18px;
-  overflow-x: hidden;
 }
 
-/* Floating orbs */
+
+/* 3. BACKGROUND LAYER — Orbs & Pseudo-elements */
 body::before {
   content: '';
   position: fixed;
@@ -41,6 +55,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
 body::after {
   content: '';
   position: fixed;
@@ -52,7 +67,125 @@ body::after {
   z-index: 0;
 }
 
-/* ── GLASS MIXIN ── */
+/* Named orb elements */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-1 {
+  width: 380px; height: 380px;
+  top: -130px; left: -100px;
+  background: radial-gradient(circle at 35% 35%,
+    rgba(255,255,255,0.55),
+    rgba(160,220,255,0.18) 60%,
+    transparent);
+}
+
+.orb-2 {
+  width: 300px; height: 300px;
+  bottom: -80px; right: -80px;
+  background: radial-gradient(circle at 40% 30%,
+    rgba(255,255,255,0.45),
+    rgba(150,240,180,0.15) 60%,
+    transparent);
+}
+
+
+/* 4. BACKGROUND LAYER — Animated Bubbles */
+.bubbles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,255,255,0.7),
+    rgba(180,230,255,0.3) 50%,
+    rgba(120,200,240,0.1) 80%,
+    transparent);
+  border: 1px solid rgba(255,255,255,0.5);
+  animation: riseBubble linear infinite;
+}
+
+/* Left side bubbles */
+.bubble:nth-child(1)  { width: 28px;  height: 28px;  left: 2%;   animation-duration: 9s;   animation-delay: 0s;   }
+.bubble:nth-child(2)  { width: 14px;  height: 14px;  left: 8%;   animation-duration: 7s;   animation-delay: 1.5s; }
+.bubble:nth-child(3)  { width: 40px;  height: 40px;  left: 14%;  animation-duration: 11s;  animation-delay: 0.8s; }
+.bubble:nth-child(4)  { width: 18px;  height: 18px;  left: 5%;   animation-duration: 8s;   animation-delay: 3s;   }
+.bubble:nth-child(5)  { width: 22px;  height: 22px;  left: 18%;  animation-duration: 9.5s; animation-delay: 2s;   }
+/* Right side bubbles */
+.bubble:nth-child(6)  { width: 55px;  height: 55px;  left: 80%;  animation-duration: 13s;  animation-delay: 0.3s; }
+.bubble:nth-child(7)  { width: 10px;  height: 10px;  left: 87%;  animation-duration: 6s;   animation-delay: 1s;   }
+.bubble:nth-child(8)  { width: 32px;  height: 32px;  left: 93%;  animation-duration: 10s;  animation-delay: 4s;   }
+.bubble:nth-child(9)  { width: 16px;  height: 16px;  left: 76%;  animation-duration: 7.5s; animation-delay: 2.5s; }
+.bubble:nth-child(10) { width: 45px;  height: 45px;  left: 97%;  animation-duration: 12s;  animation-delay: 5s;   }
+/* Extra left side bubbles */
+.bubble:nth-child(11) { width: 20px;  height: 20px;  left: 11%;  animation-duration: 10s;  animation-delay: 6s;   }
+.bubble:nth-child(12) { width: 35px;  height: 35px;  left: 3%;   animation-duration: 8.5s; animation-delay: 0.5s; }
+.bubble:nth-child(13) { width: 12px;  height: 12px;  left: 16%;  animation-duration: 7s;   animation-delay: 3.5s; }
+/* Extra right side bubbles */
+.bubble:nth-child(14) { width: 24px;  height: 24px;  left: 83%;  animation-duration: 9s;   animation-delay: 1.8s; }
+.bubble:nth-child(15) { width: 38px;  height: 38px;  left: 90%;  animation-duration: 11s;  animation-delay: 4.5s; }
+.bubble:nth-child(16) { width: 15px;  height: 15px;  left: 78%;  animation-duration: 6.5s; animation-delay: 7s;   }
+
+@keyframes riseBubble {
+  0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translateY(-50vh) translateX(18px) scale(0.95); }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-105vh) translateX(-10px) scale(0.85); opacity: 0; }
+}
+
+
+/* 5. LAYOUT — Wrapper & Column Grid */
+#wrapper {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+#columns {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+}
+
+#sidebar-left {
+  width: 195px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 0;
+}
+
+#sidebar-right {
+  width: 190px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+
+/* 6. UTILITIES — Glass Mixin & Badge */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(14px) saturate(1.4);
@@ -65,20 +198,182 @@ body::after {
     inset 0 -1px 0 rgba(100,180,240,0.15);
 }
 
-/* ── WRAPPER ── */
-#wrapper {
-  max-width: 1180px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+/* Glossy pill badge */
+.badge {
+  display: inline-block;
+  background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(180,230,255,0.6) 50%, rgba(130,210,250,0.4) 100%);
+  border: 1.5px solid rgba(255,255,255,0.9);
+  border-radius: 50px;
+  padding: 4px 14px;
+  font-size: 0.78em;
+  font-weight: 800;
+  color: #1a7fb5;
+  box-shadow: 0 2px 8px rgba(60,180,240,0.3), inset 0 1px 0 rgba(255,255,255,1);
+  margin: 0 4px;
+  letter-spacing: 0.5px;
 }
 
-/* ── HEADER ── */
+/* Leaf decoration */
+.leaf-row {
+  text-align: center;
+  font-size: 1.1em;
+  letter-spacing: 4px;
+  margin-bottom: 6px;
+  opacity: 0.6;
+}
+
+/* div */
+.title {
+  display: flex;
+  gap: 80px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nature divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 26px;
+  max-width: 280px;
+  color: rgba(60,160,240,0.4);
+  font-size: 0.8em;
+  letter-spacing: 4px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(60,160,240,0.25), transparent);
+}
+
+
+/* 7. PANELS — Base & Title */
+.panel {
+  padding: 14px 15px;
+}
+
+.panel-title {
+  font-family: 'Comfortaa', cursive;
+  font-size: 0.8em;
+  font-weight: 700;
+  /* text-transform: uppercase; */
+  letter-spacing: 1.5px;
+  color: #1a7fb5;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4fd1f5, #2ab5e6);
+  box-shadow: 0 0 6px rgba(60,180,240,0.6);
+  flex-shrink: 0;
+}
+
+
+/* 8. MAIN CARD (404 / standalone) */
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border: 1.5px solid var(--glass-border);
+  border-radius: 28px;
+  box-shadow:
+    0 8px 40px var(--glass-shadow),
+    inset 0 1.5px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(100,180,240,0.12);
+  padding: 52px 56px 44px;
+  text-align: center;
+  max-width: 520px;
+  width: calc(100% - 40px);
+  animation: floatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Gloss shine on card top */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12%; right: 12%;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0));
+  border-radius: 0 0 60% 60%;
+  pointer-events: none;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* 404 error number */
+.error-code {
+  font-family: 'Comfortaa', cursive;
+  font-size: 5.5em;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #1a7fb5 0%, #2bc48a 45%, #1a9fd4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 3px 6px rgba(0,100,180,0.18));
+  letter-spacing: -2px;
+}
+
+/* Tagline & subtext */
+.tagline {
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.18em;
+  font-weight: 700;
+  color: #1a6fa0;
+  margin-bottom: 10px;
+}
+
+.subtext {
+  color: var(--text-mid);
+  font-size: 0.9em;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+
+/* Footer note */
+.footer-note {
+  margin-top: 26px;
+  font-size: 0.76em;
+  color: rgba(44,96,128,0.55);
+  letter-spacing: 0.3px;
+}
+
+.footer-note span {
+  display: inline-block;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 6px;
+  padding: 1px 8px;
+  font-weight: 700;
+  color: #1a7fb5;
+  font-size: 0.95em;
+}
+
+
+/* 9. HEADER SECTION */
 #header {
   text-align: center;
   padding: 22px 20px 18px;
   margin-bottom: 14px;
   position: relative;
+  animation: floatUp 0.5s ease forwards;
 }
 
 #header h1 {
@@ -100,84 +395,102 @@ body::after {
   font-weight: 600;
 }
 
-/* Glossy pill badge */
-.badge {
-  display: inline-block;
-  background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(180,230,255,0.6) 50%, rgba(130,210,250,0.4) 100%);
-  border: 1.5px solid rgba(255,255,255,0.9);
-  border-radius: 50px;
-  padding: 4px 14px;
-  font-size: 0.78em;
-  font-weight: 800;
-  color: #1a7fb5;
-  box-shadow: 0 2px 8px rgba(60,180,240,0.3), inset 0 1px 0 rgba(255,255,255,1);
-  margin: 0 4px;
-  letter-spacing: 0.5px;
-}
 
-/* ── COLUMNS ── */
-#columns {
-  display: flex;
-  gap: 13px;
-  align-items: flex-start;
-}
-
-/* ── LEFT SIDEBAR ── */
-#sidebar-left {
-  width: 195px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-}
-
-/* ── MAIN ── */
-#main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  min-width: 0;
-}
-
-/* ── RIGHT SIDEBAR ── */
-#sidebar-right {
-  width: 190px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-}
-
-/* ── PANEL BASE ── */
-.panel {
-  padding: 14px 15px;
-}
-
-.panel-title {
-  font-family: 'Comfortaa', cursive;
-  font-size: 0.8em;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #1a7fb5;
-  margin-bottom: 10px;
+/* 10. COMPONENTS — Fish Icon */
+.icon-wrap {
+  margin: 0 auto 18px;
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a8eeff, #5bc8f0);
+  border: 3px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 6px 22px rgba(60,180,240,0.35),
+    inset 0 2px 0 rgba(255,255,255,0.8);
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 2.6em;
+  animation: bobFloat 3.5s ease-in-out infinite;
+}
+
+@keyframes bobFloat {
+  0%, 100% { transform: translateY(0);   }
+  50%       { transform: translateY(-8px); }
+}
+
+
+/* 11. COMPONENTS — Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 11px 24px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.88em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.panel-title::before {
+.btn::after {
   content: '';
-  display: inline-block;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4fd1f5, #2ab5e6);
-  box-shadow: 0 0 6px rgba(60,180,240,0.6);
-  flex-shrink: 0;
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 48%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0));
+  border-radius: 0 0 50% 50%;
+  pointer-events: none;
 }
 
-/* ── GLOSSY BUTTONS / NAV ── */
+.btn-primary {
+  color: white;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.25) 0%,
+    transparent 50%,
+    rgba(0,0,0,0.04) 100%),
+    linear-gradient(135deg, #3abfe6, #2095c0);
+  box-shadow:
+    0 4px 16px rgba(60,160,240,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  text-shadow: 0 1px 2px rgba(0,80,140,0.3);
+}
+
+.btn-secondary {
+  color: #1a4a70;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.95) 0%,
+    rgba(210,240,255,0.7) 45%,
+    rgba(160,220,250,0.5) 55%,
+    rgba(200,238,255,0.4) 100%);
+  border: 1.5px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 3px 12px rgba(60,160,240,0.2),
+    inset 0 1px 0 rgba(255,255,255,1);
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(60,160,240,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 6px 18px rgba(60,160,240,0.3), inset 0 1px 0 rgba(255,255,255,1);
+}
+
+/* Nav buttons (sidebar) */
 .nav-btn {
   display: block;
   width: 100%;
@@ -228,26 +541,69 @@ body::after {
   box-shadow: 0 3px 12px rgba(60,200,100,0.25), inset 0 1px 0 rgba(255,255,255,1);
 }
 
-/* ── UPDATE LOG ── */
-.update-entry {
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(255,255,255,0.8);
-  margin-bottom: 7px;
-  font-size: 0.82em;
-}
-
-.update-date {
+/* CTA button */
+.cta-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
   font-weight: 800;
-  color: #1a9fd4;
-  font-size: 0.85em;
-  margin-bottom: 2px;
+  font-size: 0.9em;
+  color: white;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.3) 0%,
+    transparent 50%,
+    rgba(0,0,0,0.05) 100%),
+    linear-gradient(135deg, #3abfe6, #2095c0);
+  box-shadow:
+    0 4px 14px rgba(60,160,240,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  text-shadow: 0 1px 2px rgba(0,80,140,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-top: 8px;
 }
 
-.update-text { color: var(--text-mid); line-height: 1.4; }
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(60,160,240,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+}
 
-/* ── WELCOME BOX ── */
+/* Site button grid (right sidebar) */
+.button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.site-btn {
+  height: 31px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #5bc8f0, #3ab5e6);
+  border: 1.5px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 6px rgba(60,160,240,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6em;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,80,140,0.4);
+  cursor: pointer;
+  transition: transform 0.1s;
+  text-align: center;
+  padding: 2px 4px;
+}
+
+.site-btn:hover { transform: scale(1.05); }
+.site-btn.green  { background: linear-gradient(135deg, #6dd96d, #4dc44d); }
+.site-btn.pink   { background: linear-gradient(135deg, #f0a0c8, #e070a8); }
+.site-btn.orange { background: linear-gradient(135deg, #f0c060, #e09030); }
+
+
+/* 12. COMPONENTS — Welcome Box */
 #welcome {
   padding: 20px 22px;
   position: relative;
@@ -278,7 +634,8 @@ body::after {
   font-size: 0.93em;
 }
 
-/* ── MOOD / STATUS ── */
+
+/* 13. COMPONENTS — Status / Mood */
 #status {
   padding: 15px 18px;
   display: flex;
@@ -326,38 +683,28 @@ body::after {
   margin-top: 5px;
 }
 
-/* ── BUTTON GRID (right sidebar) ── */
-.button-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
+
+/* 14. COMPONENTS — Update Log */
+.update-entry {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  margin-bottom: 7px;
+  font-size: 0.82em;
 }
 
-.site-btn {
-  height: 31px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, #5bc8f0, #3ab5e6);
-  border: 1.5px solid rgba(255,255,255,0.8);
-  box-shadow: 0 2px 6px rgba(60,160,240,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6em;
+.update-date {
   font-weight: 800;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0,80,140,0.4);
-  cursor: pointer;
-  transition: transform 0.1s;
-  text-align: center;
-  padding: 2px 4px;
+  color: #1a9fd4;
+  font-size: 0.85em;
+  margin-bottom: 2px;
 }
 
-.site-btn:hover { transform: scale(1.05); }
-.site-btn.green { background: linear-gradient(135deg, #6dd96d, #4dc44d); }
-.site-btn.pink { background: linear-gradient(135deg, #f0a0c8, #e070a8); }
-.site-btn.orange { background: linear-gradient(135deg, #f0c060, #e09030); }
+.update-text { color: var(--text-mid); line-height: 1.4; }
 
-/* ── MINI GALLERY ── */
+
+/* 15. COMPONENTS — Mini Gallery */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -381,14 +728,15 @@ body::after {
   font-size: 1.8em;
 }
 
-.gallery-item:nth-child(1) .gallery-item-inner { background: linear-gradient(135deg, #a8eeff, #60c8f0); }
-.gallery-item:nth-child(2) .gallery-item-inner { background: linear-gradient(135deg, #a8ffcc, #60d480); }
-.gallery-item:nth-child(3) .gallery-item-inner { background: linear-gradient(135deg, #ffd4a8, #f0a060); }
-.gallery-item:nth-child(4) .gallery-item-inner { background: linear-gradient(135deg, #e4a8ff, #c060f0); }
-.gallery-item:nth-child(5) .gallery-item-inner { background: linear-gradient(135deg, #fffca8, #f0d060); }
-.gallery-item:nth-child(6) .gallery-item-inner { background: linear-gradient(135deg, #ffa8c8, #f060a0); }
+.gallery-item-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
-/* ── GUESTBOOK ── */
+
+/* 16. COMPONENTS — Guestbook */
 .guestbook-entry {
   background: rgba(255,255,255,0.55);
   border: 1px solid rgba(255,255,255,0.85);
@@ -401,61 +749,13 @@ body::after {
 .guestbook-entry strong { color: #1a7fb5; font-weight: 800; }
 .guestbook-entry p { color: var(--text-mid); margin-top: 2px; line-height: 1.4; }
 
-/* ── NATURE DIVIDER ── */
-.divider {
-  text-align: center;
-  color: rgba(60,160,240,0.4);
-  font-size: 0.85em;
-  letter-spacing: 6px;
-  margin: 2px 0;
-}
 
-/* ── SIGN GUESTBOOK BTN ── */
-.cta-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: 0.9em;
-  color: white;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,0.3) 0%,
-    transparent 50%,
-    rgba(0,0,0,0.05) 100%),
-    linear-gradient(135deg, #3abfe6, #2095c0);
-  box-shadow:
-    0 4px 14px rgba(60,160,240,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.5);
-  text-shadow: 0 1px 2px rgba(0,80,140,0.3);
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-top: 8px;
-}
-
-.cta-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(60,160,240,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
-}
-
-/* ── SCROLL ANIMATIONS ── */
+/* 17. ANIMATIONS — Entrance & Scroll */
 @keyframes floatUp {
-  0% { opacity: 0; transform: translateY(16px); }
+  0%   { opacity: 0; transform: translateY(16px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-#header { animation: floatUp 0.5s ease forwards; }
-#sidebar-left { animation: floatUp 0.5s 0.1s ease both; }
-#main { animation: floatUp 0.5s 0.2s ease both; }
+#sidebar-left  { animation: floatUp 0.5s 0.1s ease both; }
+#main          { animation: floatUp 0.5s 0.2s ease both; }
 #sidebar-right { animation: floatUp 0.5s 0.3s ease both; }
-
-/* ── LEAF DECORATION ── */
-.leaf-row {
-  text-align: center;
-  font-size: 1.1em;
-  letter-spacing: 4px;
-  margin-bottom: 6px;
-  opacity: 0.6;
-}
