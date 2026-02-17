@@ -10,23 +10,7 @@
 </head>
 <body>
 
-  <!-- Floating orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <!-- Rising bubbles -->
-  <div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-  </div>
+<div id="background"></div>
 
 <div id="wrapper">
 
@@ -50,6 +34,7 @@
       document.getElementById(id).innerHTML = html;
     }
 
+    loadComponent('background', './home_page/background.html');
     loadComponent('header', './home_page/header.html');
     loadComponent('sidebar-left', './home_page/left_column.html');
     loadComponent('main', './home_page/center_column.html');
