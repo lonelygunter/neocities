@@ -16,9 +16,37 @@
 
     <!-- 1th column -->
     <div id="left-charms"></div>
-    
+
     <!-- 2th column -->
-    <div id="main"></div>
+    <div class="column">
+
+      <!-- header -->
+      <div class="column glass">
+
+        <div id="header"></div>
+
+      </div>
+
+      <div class="three-columns">
+
+        <!-- left column -->
+        <div class="column glass">
+          <div id="navigate"></div>
+        </div>
+
+        <!-- center column -->
+        <div class="column glass">
+        <div id="gallery"></div>
+        </div>
+
+        <!-- right column -->
+        <div class="column glass">
+          <div id="badges"></div>
+        </div>
+
+      </div>
+
+    </div>
     
     <!-- 3th column -->
     <div id="right-charms"></div>
@@ -36,12 +64,11 @@
   loadComponent('left-charms', 'pages/home/charms-left.html');
   loadComponent('right-charms', 'pages/home/charms-right.html');
 
-  loadComponent('main', 'pages/home/home-main.html');
-    loadComponent('header', 'pages/home/header.html');
-    loadComponent('navigate', 'pages/home/navigate.html');
-    loadComponent('badges', 'pages/home/badges.html');
-    loadComponent('description', 'pages/home/description.html');
-    loadComponent('gallery', 'pages/home/gallery-mini.html');
+  loadComponent('header', 'pages//home/header.html');
+  loadComponent('navigate', 'pages//home/navigate.html');
+  loadComponent('badges', 'pages//home/badges.html');
+
+  loadComponent('gallery', 'pages/gallery/gallery.html');
 
 </script>
 
