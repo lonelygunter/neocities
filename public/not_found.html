@@ -1,58 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - lost at sea 🌊</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>404 error</title>
+    <link rel="icon" type="image/x-icon" href="icons/smeargle.png">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
 <body>
 
-  <!-- Floating orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+<div class="cursor"></div>
 
-  <!-- Rising bubbles -->
-  <div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-  </div>
+  <!-- <div class="three-columns"> -->
 
-  <!-- Main card -->
-  <div class="card">
+    <!-- pikmin left column -->
+    <!-- <div id="left pikmin"></div> -->
 
-    <div><img src="icons/404error.png" alt="404 error cat" width=60% height=60%></div>
+    <!-- main column -->
+    <div id="main"></div>
 
-    <div class="error-code">404</div>
+    <!-- pikmin right column -->
+    <!-- <div id="right pikmin"></div> -->
 
-    <div class="tagline">you're lost at sea!</div>
+  <!-- </div> -->
 
-    <p class="subtext">
-      this page drifted off somewhere - it might have moved,<br>
-      been deleted, or never existed in the first place :(
-    </p>
+<!-- import pages -->
+<script>
+  async function loadComponent(id, file) {
+    const res = await fetch(file);
+    const html = await res.text();
+    document.getElementById(id).innerHTML = html;
+  }
 
-    <div class="divider">· · ·</div>
+  loadComponent('left pikmin', 'pages/not_found/pikmin-left.html');
+  loadComponent('main', 'pages/not_found/not_found-main.html');
+  loadComponent('right pikmin', 'pages/not_found/pikmin-right.html');
+</script>
 
-    <div class="btn-row">
-      <a class="btn btn-primary" href="index.html">go home</a>
-      <a class="btn btn-secondary" href="javascript:history.back()">go back</a>
-    </div>
+<!-- pikmin bouncing -->
+<script>
+// ball images configs
+const BALL_COUNT = 14;
+const IMAGES = [
+  { url: 'imgs/pikmin/pikmin1.png',  color: '#ff9a3c' },
+  { url: 'imgs/pikmin/pikmin2.png',  color: '#6bcb77' },
+  { url: 'imgs/pikmin/pikmin3.png',  color: '#ff6b6b' },
+  { url: 'imgs/pikmin/pikmin4.png',  color: '#c77dff' },
+  { url: 'imgs/pikmin/pikmin5.png', color: '#4cc9f0' },
+  { url: 'imgs/pikmin/pikmin6.png', color: '#4895ef' },
+  { url: 'imgs/pikmin/pikmin7.png',  color: '#ff9a3c' },
+  { url: 'imgs/pikmin/pikmin8.png',  color: '#6bcb77' },
+  { url: 'imgs/pikmin/pikmin9.png',  color: '#ff6b6b' },
+  { url: 'imgs/pikmin/pikmin10.png',  color: '#c77dff' },
+  { url: 'imgs/pikmin/pikmin11.png', color: '#4cc9f0' },
+  { url: 'imgs/pikmin/pikmin12.png', color: '#4895ef' },
+  { url: 'imgs/pikmin/pikmin13.png', color: '#4cc9f0' },
+  { url: 'imgs/pikmin/pikmin14.png', color: '#4895ef' },
+];
 
-    <p class="footer-note">
-      error <span>404</span> - page not found
-    </p>
+// cursor
+const cursor = document.getElementById('cursor');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  mouseTrail.push({ x: mx, y: my, r: 8, life: 1 });
+});
 
-  </div>
+// balls
+const balls = [];
+let popCount = 0;
+const popEl = document.getElementById('pop-count');
 
+function createBallEl(data, i) {
+  const size = 80 + Math.random() * 80; // 80–160px
+  const div = document.createElement('div');
+  div.className = 'gravity-img';
+  div.style.width = div.style.height = size + 'px';
+
+  // Real photo from Picsum
+  const img = document.createElement('img');
+  img.src = data.url;
+  img.alt = '';
+  img.draggable = false;
+  div.appendChild(img);
+
+  document.body.appendChild(div);
+
+  const ball = {
+    el: div,
+    size,
+    x: Math.random() * (window.innerWidth - size),
+    y: Math.random() * (window.innerHeight - size),
+    vx: (Math.random() - 0.5) * 6,
+    vy: (Math.random() - 0.5) * 6,
+    grabbed: false,
+    lastMx: 0, lastMy: 0,
+    color: data.color,
+    alive: true,
+  };
+
+  balls.push(ball);
+  return ball;
+}
+
+// physic
+const FRICTION = 0.992;
+const GRAVITY = 0.08;
+
+function physics() {
+  const W = window.innerWidth, H = window.innerHeight;
+  balls.forEach(b => {
+    if (!b.alive || b.grabbed) return;
+    b.vy += GRAVITY;
+    b.vx *= FRICTION;
+    b.vy *= FRICTION;
+    b.x += b.vx;
+    b.y += b.vy;
+
+    // bounce walls
+    if (b.x < 0) { b.x = 0; b.vx = Math.abs(b.vx) * 0.85; }
+    if (b.x + b.size > W) { b.x = W - b.size; b.vx = -Math.abs(b.vx) * 0.85; }
+    if (b.y < 0) { b.y = 0; b.vy = Math.abs(b.vy) * 0.85; }
+    if (b.y + b.size > H) { b.y = H - b.size; b.vy = -Math.abs(b.vy) * 0.85; }
+
+    // cursor repulsion
+    const cx = b.x + b.size/2, cy = b.y + b.size/2;
+    const dx = cx - mx, dy = cy - my;
+    const dist = Math.hypot(dx, dy);
+    const pushR = b.size * 0.7;
+    if (dist < pushR && dist > 0) {
+      const push = (pushR - dist) / pushR * 1.5;
+      b.vx += (dx / dist) * push;
+      b.vy += (dy / dist) * push;
+    }
+
+    // ball collision
+    balls.forEach(b2 => {
+      if (b2 === b || !b2.alive) return;
+      const dx2 = (b.x + b.size/2) - (b2.x + b2.size/2);
+      const dy2 = (b.y + b.size/2) - (b2.y + b2.size/2);
+      const minDist = (b.size + b2.size) / 2;
+      const d = Math.hypot(dx2, dy2);
+      if (d < minDist && d > 0) {
+        const overlap = (minDist - d) / 2;
+        const nx = dx2 / d, ny = dy2 / d;
+        b.x += nx * overlap; b.y += ny * overlap;
+        b2.x -= nx * overlap; b2.y -= ny * overlap;
+        const relVx = b.vx - b2.vx, relVy = b.vy - b2.vy;
+        const dot = relVx * nx + relVy * ny;
+        if (dot < 0) {
+          b.vx -= dot * nx * 0.9; b.vy -= dot * ny * 0.9;
+          b2.vx += dot * nx * 0.9; b2.vy += dot * ny * 0.9;
+        }
+      }
+    });
+
+    b.el.style.left = b.x + 'px';
+    b.el.style.top = b.y + 'px';
+  });
+  requestAnimationFrame(physics);
+}
+
+// init
+for (let i = 0; i < BALL_COUNT; i++) {
+  const data = IMAGES[i % IMAGES.length];
+  createBallEl(data, i);
+}
+physics();
+</script>
 </body>
 </html>

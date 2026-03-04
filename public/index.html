@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>gunterxd</title>
-  <link rel="icon" type="image/x-icon" href="icons/smeargle.png">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>gunterxd</title>
+    <link rel="icon" type="image/x-icon" href="icons/smeargle.png">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
 <body>
 
-<div id="background"></div>
+<div class="cursor"></div>
 
-<div id="wrapper">
+  <div class="three-columns">
 
-  <!-- HEADER -->
-  <div id="header"></div>
-
-  <!-- 3-COLUMN LAYOUT -->
-  <div id="columns">
-
-    <div id="sidebar-left"></div>
+    <!-- 1th column -->
+    <div id="left charms"></div>
+    
+    <!-- 2th column -->
     <div id="main"></div>
-    <div id="sidebar-right"></div>
+    
+    <!-- 3th column -->
+    <div id="right charms"></div>
 
   </div>
 
+<!-- import pages -->
+<script>
+  async function loadComponent(id, file) {
+    const res = await fetch(file);
+    const html = await res.text();
+    document.getElementById(id).innerHTML = html;
+  }
 
-  <script>
-    async function loadComponent(id, file) {
-      const res = await fetch(file);
-      const html = await res.text();
-      document.getElementById(id).innerHTML = html;
-    }
+  loadComponent('left charms', 'pages/home/charms-left.html');
+  loadComponent('right charms', 'pages/home/charms-right.html');
 
-    loadComponent('background', './home_page/background.html');
-    loadComponent('header', './home_page/header.html');
-    loadComponent('sidebar-left', './home_page/left_column.html');
-    loadComponent('main', './home_page/center_column.html');
-    loadComponent('sidebar-right', './home_page/right_column.html');
-  </script>
+  loadComponent('main', 'pages/home/home-main.html');
+    loadComponent('header', 'pages/home/header.html');
+    loadComponent('navigate', 'pages/home/navigate.html');
+    loadComponent('badges', 'pages/home/badges.html');
+    loadComponent('description', 'pages/home/description.html');
+    loadComponent('gallery', 'pages/home/gallery-mini.html');
 
-</div>
+</script>
 
 </body>
 </html>
