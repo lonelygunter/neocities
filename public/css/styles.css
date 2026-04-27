@@ -8,7 +8,7 @@
 }
 
 body {
-  cursor: url('../icons/Wii\ Cursor.cur'), auto;
+  cursor: url('../icons/Wii-Cursor.png'), auto;
 
   background-color: #e5e5f7;
   background-image:
@@ -25,7 +25,7 @@ body {
 
 /* ---  BUTTON --- */
 button {
-  cursor: url('../icons/wii-open-ccw.cur'), pointer;
+  cursor: url('../icons/wii-open-ccw.png'), pointer;
 }
 
 .wii-btn {
@@ -263,12 +263,13 @@ hr {
   height: 100%;
   object-fit: contain;
   aspect-ratio: 1;
+  cursor: url('../icons/wii-move-ccw.png'), zoom-in;
 }
 
 /* --- gravity images --- */
 .gravity-img {
   position: absolute;
-  cursor: url('../icons/wii-grab-ccw.cur'), grab;
+  cursor: url('../icons/wii-grab-ccw.png'), grab;
 }
 
 .gravity-img img {
